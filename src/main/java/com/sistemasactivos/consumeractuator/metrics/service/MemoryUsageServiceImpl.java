@@ -4,7 +4,7 @@ import com.sistemasactivos.consumeractuator.metrics.DTO.MetricResponse;
 import com.sistemasactivos.consumeractuator.metrics.interfaces.IMemoryUsageService;
 import com.sistemasactivos.consumeractuator.metrics.interfaces.IMetricRepository;
 import com.sistemasactivos.consumeractuator.metrics.model.MemoryUsage;
-import com.sistemasactivos.consumeractuator.metrics.utils.BytesToGibibytesConverter;
+import com.sistemasactivos.consumeractuator.metrics.utils.BytesToGibibytesConverterStrategy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 public class MemoryUsageServiceImpl extends MetricServiceImpl<MemoryUsage> implements IMemoryUsageService{
 
     public MemoryUsageServiceImpl(IMetricRepository<MemoryUsage> repository, @Value("${secondPath}") String path) {
-        super(repository, path, new MemoryUsage(), new BytesToGibibytesConverter());
+        super(repository, path, new MemoryUsage(), new BytesToGibibytesConverterStrategy());
     }
     
     @Override   

@@ -14,6 +14,7 @@ import com.sistemasactivos.consumeractuator.metrics.model.DiskSpace;
 import com.sistemasactivos.consumeractuator.metrics.model.DiskTotal;
 import com.sistemasactivos.consumeractuator.metrics.model.MemoryUsage;
 import com.sistemasactivos.consumeractuator.metrics.model.Metric;
+import com.sistemasactivos.consumeractuator.metrics.model.ProcessCpuUsage;
 import jakarta.transaction.Transactional;
 import java.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,41 +87,11 @@ public abstract class MetricServiceImpl<M extends Metric> implements IMetricServ
     }
     if (metric.getClass() == DiskTotal.class) {
         return new DiskTotal();
+    }
+    if (metric.getClass() == DiskSpace.class) {
+        return new DiskSpace();
     }else {
-            return new DiskSpace();
+            return new ProcessCpuUsage();
       }
     }
-    
-    /*@Override
-    @Transactional
-    public Mono<MetricResponse> save() {
-         return webClient.get()
-                .uri(path)
-                .retrieve()
-                .bodyToMono(MetricRequest.class)
-                .flatMap(metricRequest -> { 
-                    // Mapeo
-                    
-                    Metric newMetric = createMetricInstance(metric);
-                    
-                    (newMetric).setValue(BytesToGibibytesConverter.convertBytesToGibibytes    //lo paso a una medida mas legible
-                            ((metricRequest).getMeasurements().get(0).getValue()));
-                    // Save
-                    repository.save((M)newMetric);
-                    // Mapeo la response
-                    MetricResponse metricResponse = ModelMapperConfig.modelMapper().map((newMetric), MetricResponse.class);
-                 
-                    return Mono.just(metricResponse);
-                })
-                .onErrorMap(WebClientResponseException.class, ex -> {
-                    try{
-                        ErrorDTO errorResponse = new ObjectMapper().readValue(ex.getResponseBodyAsString(), ErrorDTO.class);
-                        return new BusinessException(HttpStatus.valueOf(ex.getRawStatusCode()), "");
-                    } catch(JsonProcessingException e){
-                        return new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, "Error en el servidor, intente más tarde...");
-                    }
-                })
-                .timeout(Duration.ofMillis(10_000))
-                .switchIfEmpty(Mono.error(new RuntimeException("No se encontro el recurso")));
-    }*/
 }

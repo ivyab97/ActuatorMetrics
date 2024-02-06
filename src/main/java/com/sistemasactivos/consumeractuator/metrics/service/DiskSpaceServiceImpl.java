@@ -4,7 +4,7 @@ import com.sistemasactivos.consumeractuator.metrics.DTO.MetricResponse;
 import com.sistemasactivos.consumeractuator.metrics.interfaces.IDiskSpaceService;
 import com.sistemasactivos.consumeractuator.metrics.interfaces.IMetricRepository;
 import com.sistemasactivos.consumeractuator.metrics.model.DiskSpace;
-import com.sistemasactivos.consumeractuator.metrics.utils.BytesToGibibytesConverter;
+import com.sistemasactivos.consumeractuator.metrics.utils.BytesToGibibytesConverterStrategy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 public class DiskSpaceServiceImpl extends MetricServiceImpl<DiskSpace> implements IDiskSpaceService{
 
     public DiskSpaceServiceImpl(IMetricRepository<DiskSpace> repository, @Value("${firstPath}") String path) {
-        super(repository, path, new DiskSpace(), new BytesToGibibytesConverter());
+        super(repository, path, new DiskSpace(), new BytesToGibibytesConverterStrategy());
     }
     
     @Override
